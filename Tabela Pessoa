@@ -1,0 +1,35 @@
+import sqlite3
+
+try:
+    
+    conn = sqlite3.connect('pessoas.db')
+
+    cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS pessoa
+                    (cpf INTEGER PRIMARY KEY,
+                    nome TEXT,
+                    nascimento DATE,
+                    cor TEXT)''')
+
+    dados_pessoas = [
+        (12345678901, 'Railson', '2002-01-01', 'Negra'),
+        (98765432109, 'Jessica', '2000-05-15', 'Branco'),
+        (24681012141, 'Alex', '1999-11-30', 'Pardo')
+    ]
+
+    cursor.executemany('INSERT INTO pessoa (cpf, nome, nascimento, cor) VALUES (?, ?, ?, ?)', dados_pessoas)
+
+    conn.commit()
+
+    print("Dados inseridos com sucesso!")
+
+    cursor.execute('SELECT * FROM pessoa')
+    for row in cursor.fetchall():
+        print(row)
+
+except sqlite3.Error as e:
+    print("Erro de banco de dados:", e)
+
+finally:
+    conn.close()
