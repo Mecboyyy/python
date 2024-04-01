@@ -1,0 +1,29 @@
+import sqlite3
+
+conn = sqlite3.connect('carros.db')
+
+cursor = conn.cursor()
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS carros
+                (id INTEGER PRIMARY KEY,
+                nome TEXT,
+                modelo TEXT,
+                ano INTEGER,
+                pessoa TEXT)''')
+
+carros = [
+    ('Gol', 'G1', 2022, 'Julio'),
+    ('Saveiro', 'Surf', 2023, 'Larissa'),
+    ('Bmw', 'X5', 2021, 'Emanoel'),
+    ('Corolla', 'Toyota', 2020, 'Railson')
+]
+
+cursor.executemany('INSERT INTO carros (nome, modelo, ano, pessoa) VALUES (?, ?, ?, ?)', carros)
+
+conn.commit()
+
+cursor.execute('SELECT * FROM carros')
+for row in cursor.fetchall():
+    print(row)
+
+conn.close()
